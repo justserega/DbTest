@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DbTest</id>
+    <version>0.1.0.0</version>
+    <title>DbTest</title>
+    <authors>Sergei Shvec</authors>
+    <owners>Sergei Shvec</owners>
+    <licenseUrl>https://raw.githubusercontent.com/justserega/DbTest/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/justserega/DbTest</projectUrl>
+    <iconUrl></iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tiny framework for test with real db</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>database test</tags>
+  </metadata>
+</package>
