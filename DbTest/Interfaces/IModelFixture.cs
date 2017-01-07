@@ -2,6 +2,10 @@
 
 namespace DbTest
 {
+    public interface IModelFixture<T>
+    {
+        string TableName { get; }
+    }
 
     public interface IModelFixture
     {

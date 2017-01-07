@@ -5,11 +5,13 @@ namespace DbTest.Example.Tests.Fixtures
 {
     static class World
     {
-        public static void Init()
+        public static void InitDatabase()
         {
-            using (var loader = new EFFixtureLoader(new MyContext()))
+            using (var context = new MyContext())
             {
-                loader.Load(
+                var dbTest = new EFTestDatabase<MyContext>(context);
+
+                dbTest.ResetWithFixtures(
                     new Products(),
                     new Customers()
                 );

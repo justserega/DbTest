@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>DbTest</id>
-    <version>0.1.0.0</version>
+    <version>0.1.3</version>
     <title>DbTest</title>
     <authors>Sergei Shvec</authors>
     <owners>Sergei Shvec</owners>
     <licenseUrl>https://raw.githubusercontent.com/justserega/DbTest/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/justserega/DbTest</projectUrl>
-    <iconUrl></iconUrl>
+    <iconUrl>https://github.com/justserega/DbTest/raw/master/nuget_icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tiny framework for test with real db</description>
     <releaseNotes></releaseNotes>

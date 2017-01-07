@@ -12,7 +12,8 @@ namespace DbTest.Example.Tests.Fixtures
         public static Customer Apple => new Customer
         {
             Id = 1,
-            Name = "Apple Inc."
+            Name = "John Snow",
+            BornDay = new DateTime(1980, 01, 01)
         };
     }
 }

@@ -8,7 +8,7 @@ namespace DbTest.Example.Tests
         [SetUp]
         public void SetUp()
         {
-            World.Init();
+            World.InitDatabase();
         }
 
         [Test]
