@@ -2,14 +2,14 @@
 
 namespace DbTest
 {
-    public interface IModelFixture<T>
+    public interface IModelFixture<out T>
     {
         string TableName { get; }
     }
 
-    public interface IModelFixture
-    {
-        string TableName { get; }
-        Type ModelType { get; }
-    }
+    //public interface IModelFixture
+    //{
+    //    string TableName { get; }
+    //    Type ModelType { get; }
+    //}
 }

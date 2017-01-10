@@ -14,6 +14,7 @@ namespace DbTest.Example.Tests
         [Test]
         public void SaleProductToCustomer()
         {
+
             Assert.AreEqual(1, 1);
         }
     }

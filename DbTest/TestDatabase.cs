@@ -17,24 +17,25 @@ namespace DbTest
             _dataAccessLayer.CreateDatabase();
         }
 
-        public void ResetWithFixtures(params IModelFixture[] fixtures)
+        public void ResetWithFixtures(params IModelFixture<object>[] fixtures)
         {
             _databasePreparer.BeforeLoad(_dataAccessLayer);
             foreach (var fixture in fixtures) LoadFixture(fixture);
             _databasePreparer.AfterLoad(_dataAccessLayer);
         }
 
-        private void LoadFixture(IModelFixture fixture)
+        private void LoadFixture<T>(IModelFixture<T> fixture)
         {
             var tableName = fixture.TableName;
+            var modelType = typeof(T);
 
-            var columns = _dataAccessLayer.GetColumns(fixture.ModelType);
+            var columns = _dataAccessLayer.GetColumns(modelType);
 
             List<object> objects = new List<object>();
             var propertyInfoes = fixture.GetType().GetProperties(BindingFlags.Public | BindingFlags.Static);
             foreach (var pInfo in propertyInfoes)
             {
-                if (pInfo.PropertyType == fixture.ModelType)
+                if (pInfo.PropertyType == modelType)
                 {
                     objects.Add(pInfo.GetValue(null, null));
                 }
