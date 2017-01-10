@@ -8,7 +8,20 @@
 
 ## Prepare database
 
-[In progress]
+You need some database to tests. For little project `sqlite` could be a good choice (as a compromise between performance and reliability of tests). For complex scenarious you need same database which you use in production. As usual it is not problem:
+Mysql, Postgresql - lite enough, MSSQL - has LocalDb mode.
+
+In now days DbTest work only with MSSQL out-of-box, but it can configurate to work with any database throw IDatabasePrepare interface.
+DbTest has methods to reset database and load initial fixtures:
+
+```cs
+var dbTest = new TestDatabase(dataLayer);
+
+dbTest.ResetWithFixtures(
+    new Products(),
+    new Customers()
+);
+```
 
 ## Fixtures
 
