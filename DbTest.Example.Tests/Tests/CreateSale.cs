@@ -1,4 +1,5 @@
-﻿using DbTest.Example.Tests.Fixtures;
+﻿using DbTest.Example.Tests.Base;
+using DbTest.Example.Tests.Fixtures;
 using NUnit.Framework;
 
 namespace DbTest.Example.Tests
@@ -14,6 +15,10 @@ namespace DbTest.Example.Tests
         [Test]
         public void SaleProductToCustomer()
         {
+            var builder = new ModelBuilder();
+            var sale = builder.CreateSale(Products.Pen, Customers.Apple);
+
+            
 
             Assert.AreEqual(1, 1);
         }

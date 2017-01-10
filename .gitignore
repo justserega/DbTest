@@ -9,6 +9,7 @@
 *.ilk
 *.vspscc
 *.vssscc
+*.nupkg
 
 packages/
 Backup/

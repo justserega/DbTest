@@ -27,7 +27,10 @@ namespace DbTest
         private void LoadFixture<T>(IModelFixture<T> fixture)
         {
             var tableName = fixture.TableName;
-            var modelType = typeof(T);
+            var modelType = fixture.GetType().GetInterfaces()
+                .First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IModelFixture<>))
+                .GetGenericArguments()[0];
+
 
             var columns = _dataAccessLayer.GetColumns(modelType);
 
