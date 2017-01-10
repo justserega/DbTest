@@ -16,10 +16,11 @@ Install-Package DbTest
 ```
 Or version for EntityFramework 6 with code-first (ready for use):
 ```
-Install-Package DbTest-EF6 (in progress)
+Install-Package DbTest.EF6
 ```
 
-### Documentation (in progress)
+### Documentation
 
 * [Motivation](https://github.com/justserega/DbTest/blob/master/docs/Motivation.md)
 * [Core concepts](https://github.com/justserega/DbTest/blob/master/docs/CoreConcepts.md)
+* [Configure](https://github.com/justserega/DbTest/blob/master/docs/Configure.md) [In progress]
