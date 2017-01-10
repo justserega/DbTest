@@ -17,7 +17,7 @@ For example, Products can be related to Manufacturers which related to Country.
 
 Let's start from model which has no relations: 
 
-```
+```cs
 public class Countries : IModelFixture<Country>
 {
     public string TableName => "Countries";
@@ -38,7 +38,7 @@ public class Countries : IModelFixture<Country>
 First of all we need class that realize `IModelFixture<T>` interface. Each model instances are declared as static to give easy access to it from any part of other fixtures or tests. You need set identifiers explicitly and control uniqueness between one class of model.
 
 Now, we are ready to create Manufacturers and Products.
-```
+```cs
 public class Manufacturers : IModelFixture<Manufacturer>
 {
     public string TableName => "Manufacturers";
@@ -79,7 +79,7 @@ Pay attention to external keys in models we do not set it explicitly instead tak
 Secondly, you can create singletons, set values to static variable and so on. For example, for `asp.net mvc` you can set HttpContext 
 with a user:
 
-```
+```cs
 public class World
 {
     public static void InitDatabase()
@@ -116,7 +116,7 @@ public class World
 `Model builder` is a helper to create test case. It is not included in `DbTest`, you have to create it. Each methods of this class must 
 create and return one entity:
 
-```
+```cs
 public class ModelBuilder 
 {
     public Product CreateProduct(Manufacturer manufacturer, string productName, Unit unit)
@@ -140,7 +140,7 @@ public class ModelBuilder
 
 ## Use in test [In progress]
 
-```
+```cs
 public class CreateSale
 {
     [SetUp]
