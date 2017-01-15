@@ -51,19 +51,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Good.cs" />
+    <Compile Include="Models\Manufacturer.cs" />
+    <Compile Include="Models\MoveDocument.cs" />
     <Compile Include="Models\MyContext.cs" />
-    <Compile Include="Models\Sale.cs" />
+    <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\Unit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\RemainItem.cs" />
+    <Compile Include="Services\RemainsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

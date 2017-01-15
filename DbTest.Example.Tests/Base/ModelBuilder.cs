@@ -1,24 +1,54 @@
 ﻿using DbTest.Example.Models;
+using System;
+using System.Globalization;
 
 namespace DbTest.Example.Tests.Base
 {
     public class ModelBuilder
     {
-        public Sale CreateSale(Product product, Customer customer)
+        public MoveDocument CreateDocument(string time, Storage source, Storage dest)
         {
-            var sale = new Sale
+            var document = new MoveDocument
             {
-                CustomerId = customer.Id,
-                ProductId = product.Id,
+                Number = "#",
+
+                SourceStorageId = source.Id,
+                DestStorageId = dest.Id,
+
+                Time = ParseTime(time),
+                IsDeleted = false
             };
 
             using (var db = new MyContext())
             {
-                db.Sales.Add(sale);
+                db.MoveDocuments.Add(document);
                 db.SaveChanges();
             }
 
-            return sale;
+            return document;
+        }
+
+        public MoveDocumentItem AddGood(MoveDocument document, Good good, decimal count)
+        {
+            var item = new MoveDocumentItem
+            {
+                MoveDocumentId = document.Id,
+                GoodId = good.Id,
+                Count = count
+            };
+
+            using (var db = new MyContext())
+            {
+                db.MoveDocumentItems.Add(item);
+                db.SaveChanges();
+            }
+
+            return item;
+        }
+
+        private DateTime ParseTime(string str)
+        {
+            return DateTime.ParseExact(str, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         }
     }
 }

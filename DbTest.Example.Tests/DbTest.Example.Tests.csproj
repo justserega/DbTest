@@ -51,11 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\ModelBuilder.cs" />
-    <Compile Include="Tests\CreateSale.cs" />
-    <Compile Include="Fixtures\Customers.cs" />
-    <Compile Include="Fixtures\Products.cs" />
+    <Compile Include="Fixtures\Countries.cs" />
+    <Compile Include="Fixtures\Goods.cs" />
+    <Compile Include="Fixtures\Manufacturers.cs" />
+    <Compile Include="Fixtures\Storages.cs" />
+    <Compile Include="Fixtures\Units.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Base\World.cs" />
+    <Compile Include="Tests\RemainsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DbTest.EF\DbTest.EF.csproj">

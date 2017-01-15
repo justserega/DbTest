@@ -10,9 +10,9 @@ namespace DbTest.Example
         {
             using (var context = new MyContext())
             {
-                var products = context.Products.Where(x => x.IsDeleted == false);
+                var goods = context.Goods.Where(x => x.IsDeleted == false);
 
-                foreach (var p in products) Console.WriteLine(p.Name);
+                foreach (var g in goods) Console.WriteLine(g.Name);
                 Console.ReadKey();
             }
         }

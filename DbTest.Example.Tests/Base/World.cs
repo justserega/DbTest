@@ -12,8 +12,10 @@ namespace DbTest.Example.Tests.Fixtures
                 var dbTest = new EFTestDatabase<MyContext>(context);
 
                 dbTest.ResetWithFixtures(
-                    new Products(),
-                    new Customers()
+                    new Units(),
+                    new Countries(),
+                    new Manufacturers(),
+                    new Goods()
                 );
             }
         }
