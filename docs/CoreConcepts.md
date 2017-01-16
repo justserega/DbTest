@@ -35,53 +35,65 @@ public class Countries : IModelFixture<Country>
 {
     public string TableName => "Countries";
 
-    public static Country USA => new Country {
-        Id = 11,
-        Name = "United States of America",
-        ShortName = "USA"
-    }
-    
-    public static Country SouthKorea => new Country {
-        Id = 12,
-        Name = "Republic of Korea",
-        ShortName = "South Korea"
-    }
+    public static Country Scotland => new Country
+    {
+        Id = 1,
+        Name = "Scotland",
+        IsDeleted = false
+    };
+
+    public static Country USA => new Country
+    {
+        Id = 2,
+        Name = "USA",
+        IsDeleted = false
+    };
 }
 ```
 First of all we need class that realize `IModelFixture<T>` interface. Each model instances are declared as static to give easy access to it from any part of other fixtures or tests. You need set identifiers explicitly and control uniqueness between one class of model.
 
 Now, we are ready to create Manufacturers and Products.
 ```cs
-public class Manufacturers : IModelFixture<Manufacturer>
+class Manufacturers : IModelFixture<Manufacturer>
 {
     public string TableName => "Manufacturers";
 
-    public static Manufacturer AppleInc => new Manufacturer {
-        Id = 101,
-        Name = "Apple Inc.",
-        CountryId = Countries.USA.Id
-    }
-    
-    public static Manufacturer SamsungGroup => new Manufacturer {
-        Id = 102,
-        Name = "Samsung Group",
-        CountryId = Countries.SouthKorea.Id    
+    public static Manufacturer BrownForman => new Manufacturer
+    {
+        Id = 1,
+        Name = "Brown-Forman",
+        CountryId = Countries.USA.Id,
+        IsDeleted = false
+    };
+
+    public static Manufacturer TheEdringtonGroup => new Manufacturer
+    {
+        Id = 2,
+        Name = "The Edrington Group",
+        CountryId = Countries.Scotland.Id,
+        IsDeleted = false
+    };
 }
 
-public class Products : IModelFixture<Product>
+public class Goods : IModelFixture<Good>
 {
-    public string TableName => "Products";
+    public string TableName => "Goods";
 
-    public static Product iPhone => new Product {
-        Id = 1001,
-        Name = "iPhone XXX",
-        ManufacturerId = Manufacturers.AppleInc.Id
-    }
-    
-    public static Manufacturer Galaxy => new Manufacturer {
-        Id = 1002,
-        Name = "Galaxy XXX",
-        CountryId = Manufacturers.SamsungGroup.Id    
+    public static Good JackDaniels => new Good
+    {
+        Id = 1,
+        Name = "Jack Daniels, 0.5l",
+        ManufacturerId = Manufacturers.BrownForman.Id,
+        IsDeleted = false
+    };
+
+    public static Good FamousGrouseFinest => new Good
+    {
+        Id = 2,
+        Name = "The Famous Grouse Finest, 0.5l",
+        ManufacturerId = Manufacturers.TheEdringtonGroup.Id,
+        IsDeleted = false
+    };
 }
 ```
 Pay attention to external keys in models we do not set it explicitly instead take value from another fixture. You give advise from  intellisence when create your fixtures and check from compiler when your system change and fixtures must changed too.
@@ -93,7 +105,7 @@ Secondly, you can create singletons, set values to static variable and so on. Fo
 with a user:
 
 ```cs
-public class World
+static class World
 {
     public static void InitDatabase()
     {
@@ -102,8 +114,9 @@ public class World
             var dbTest = new EFTestDatabase<MyContext>(context);
 
             dbTest.ResetWithFixtures(
-                new Products(),
-                new Customers()
+                new Countries(),
+                new Manufacturers(),
+                new Goods()
             );
         }
     }
@@ -114,8 +127,6 @@ public class World
             new HttpRequest("", "http://your-domain.com", ""),
             new HttpResponse(new StringWriter())
         );
-
-        // User is logged in
         HttpContext.Current.User = new GenericPrincipal(
             new GenericIdentity("root"),
             new string[0]
@@ -130,23 +141,46 @@ public class World
 create and return one entity:
 
 ```cs
-public class ModelBuilder 
+public class ModelBuilder
 {
-    public Product CreateProduct(Manufacturer manufacturer, string productName, Unit unit)
+    public MoveDocument CreateDocument(string time, Storage source, Storage dest)
     {
-        var product = new Product
+        var document = new MoveDocument
         {
-            Name = productName,
-            ManufacturerId = manufacturer.Id,
-            UnitId = unitId,            
-        }
-        
-        using (var db = new DbContext())
+            Number = "#",
+
+            SourceStorageId = source.Id,
+            DestStorageId = dest.Id,
+
+            Time = ParseTime(time),
+            IsDeleted = false
+        };
+
+        using (var db = new MyContext())
         {
-            db.Products.Add(product);
+            db.MoveDocuments.Add(document);
             db.SaveChanges();
         }
-        return product;
+
+        return document;
+    }
+
+    public MoveDocumentItem AddGood(MoveDocument document, Good good, decimal count)
+    {
+        var item = new MoveDocumentItem
+        {
+            MoveDocumentId = document.Id,
+            GoodId = good.Id,
+            Count = count
+        };
+
+        using (var db = new MyContext())
+        {
+            db.MoveDocumentItems.Add(item);
+            db.SaveChanges();
+        }
+
+        return item;
     }
 }
 ```
@@ -154,20 +188,33 @@ public class ModelBuilder
 ## Use in test [In progress]
 
 ```cs
-public class CreateSale
+[SetUp]
+public void SetUp()
 {
-    [SetUp]
-    public void SetUp()
-    {
-        World.InitDatabase();
-       
-    }
+    World.InitDatabase(); // подготавливаем базу к каждому тесту
+}
 
-    [Test]
-    public void TestMethod()
-    {
-      var builder = new ModelBuilder();
-      var sale = builder.CreateSale(Customers.MrBond)
-    }
+[Test]
+public void CalculateRemainsForMoveDocuments()
+{
+    /// ARRANGE - создаем тестовую ситуацию
+    var builder = new ModelBuilder();           
+
+    // Приход товаров на удаленный склад
+    var doc1 = builder.CreateDocument("15.01.2016 10:00:00", Storages.MainStorage, Storages.RemoteStorage);
+    builder.AddGood(doc1, Goods.JackDaniels, 10);
+    builder.AddGood(doc1, Goods.FamousGrouseFinest, 15);
+           
+    // Расход товаров с удаленного склада
+    var doc2 = builder.CreateDocument("16.01.2016 20:00:00", Storages.RemoteStorage, Storages.MainStorage);
+    builder.AddGood(doc2, Goods.FamousGrouseFinest, 7);
+
+    /// ACT - вызываем тестируемую функцию
+    var remains = RemainsService.GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
+
+    /// ASSERT - проверяем результат
+    Assert.AreEqual(2,  remains.Count);
+    Assert.AreEqual(10, remains.Single(x => x.GoodId == Goods.JackDaniels.Id).Count);
+    Assert.AreEqual(8,  remains.Single(x => x.GoodId == Goods.FamousGrouseFinest.Id).Count);
 }
 ```
