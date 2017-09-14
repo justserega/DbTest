@@ -4,11 +4,11 @@ DbTest is a tiny test framework for .NET application. It helps you write tests w
 
 DbTest gives you clean database for each tests. It offers easy and maintainable way to create initial fixtures and test cases.
 
-###Influences
+### Influences
 
 DbTest is inspired by the test approach from  [Ruby on Rails](https://github.com/rails/rails), [Django](https://github.com/django/django), [Yii2](https://github.com/yiisoft/yii2) and many other perfect dynamic language frameworks. This approach is a very popular in dynamic languages.
 
-###Installation
+### Installation
 
 Install common version for any ORM from nuget (need some configuration):
 ```
