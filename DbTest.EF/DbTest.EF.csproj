@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DbTest.EF</RootNamespace>
     <AssemblyName>DbTest.EF</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DbTest\DbTest.csproj">
-      <Project>{a522ad53-4308-431f-8868-0445bb9c020e}</Project>
+      <Project>{a5d7b1d7-0d6c-4291-9d62-b1e9318da67d}</Project>
       <Name>DbTest</Name>
     </ProjectReference>
   </ItemGroup>

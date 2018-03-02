@@ -27,15 +27,15 @@ namespace DbTest
         private void LoadFixture<T>(IModelFixture<T> fixture)
         {
             var tableName = fixture.TableName;
-            var modelType = fixture.GetType().GetInterfaces()
-                .First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IModelFixture<>))
-                .GetGenericArguments()[0];
+            var modelType = fixture.GetType().GetTypeInfo().GetInterfaces()
+                .First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IModelFixture<>))
+                .GenericTypeArguments[0];
 
 
             var columns = _dataAccessLayer.GetColumns(modelType);
 
             List<object> objects = new List<object>();
-            var propertyInfoes = fixture.GetType().GetProperties(BindingFlags.Public | BindingFlags.Static);
+            var propertyInfoes = fixture.GetType().GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Static);
             foreach (var pInfo in propertyInfoes)
             {
                 if (pInfo.PropertyType == modelType)

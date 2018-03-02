@@ -1,6 +1,7 @@
-﻿using DbTest.Example.Models;
+﻿using DbTest;
+using StockAppCore.Models;
 
-namespace DbTest.Example.Tests.Fixtures
+namespace StockAppCore.Tests.Fixtures
 {
     public class Units : IModelFixture<Unit>
     {

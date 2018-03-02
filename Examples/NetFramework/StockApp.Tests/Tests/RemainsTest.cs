@@ -12,7 +12,7 @@ namespace DbTest.Example.Tests
         [SetUp]
         public void SetUp()
         {
-            World.InitDatabase();
+            World.InitDatabase();            
         }
 
         [Test]

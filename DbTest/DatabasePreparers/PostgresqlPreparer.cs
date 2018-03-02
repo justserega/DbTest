@@ -6,22 +6,34 @@ using System.Reflection;
 
 namespace DbTest
 {
-    public class SqlServerPreparer : IDatabasePreparer
+    public class PostgresqlPreparer : IDatabasePreparer
     {
         public void BeforeLoad(IDataAccessLayer connection)
         {
-            connection.Execute("EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'");
-            connection.Execute("EXEC sp_msforeachtable @command1='DELETE FROM ?', @whereand='and o.name not like \"[_][_]%\"' ");
+            connection.Execute(@"
+                    do
+                    $$
+                    declare
+                      l_stmt text;
+                    begin
+                      select 'truncate ' || string_agg(format('%I.%I', schemaname, tablename), ',')
+                        into l_stmt
+                      from pg_tables
+                      where schemaname in ('public') and tablename != '__EFMigrationsHistory';
+
+                      execute l_stmt;
+                    end;
+                    $$
+                ");
         }
 
         public void AfterLoad(IDataAccessLayer connection)
         {
-            connection.Execute("EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all'");
         }
 
         public void InsertObjects(IDataAccessLayer connection, string tableName, List<string> columnNames, List<object[]> rows)
         {
-            var columns = string.Join(",", columnNames);
+            var columns = string.Join(",", columnNames.Select(x => $"\"{x}\""));
 
             foreach (var row in rows)
             {
@@ -34,7 +46,7 @@ namespace DbTest
                             values.Add("null");
                             break;
                         case String str:
-                            values.Add($"N'{str}'");
+                            values.Add($"'{str}'");
                             break;
                         case Guid guid:
                             values.Add($"'{guid}'");
@@ -49,7 +61,7 @@ namespace DbTest
                             values.Add(f.ToString(CultureInfo.InvariantCulture));
                             break;
                         case bool boolVal:
-                            values.Add(boolVal ? "1" : "0");
+                            values.Add(boolVal ? "True" : "False");
                             break;
                         case DateTime dateVal:
                             values.Add($"'{dateVal.ToString("yyyy-MM-dd HH:mm:ss")}'");
@@ -74,10 +86,7 @@ namespace DbTest
                     
                 }
 
-                var sql = $@"
-                    SET IDENTITY_INSERT {tableName} ON;
-                    INSERT INTO {tableName} ({columns}) VALUES ({string.Join(",", values)});
-                    SET IDENTITY_INSERT {tableName} OFF;";
+                var sql = $@"INSERT INTO ""{tableName}"" ({columns}) VALUES ({string.Join(",", values)});";
                 connection.Execute(sql);
             }
         }
