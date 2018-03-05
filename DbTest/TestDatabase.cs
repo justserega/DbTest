@@ -44,14 +44,14 @@ namespace DbTest
                 }
             }
 
-            var columnNames = columns.Select(x => x.Name).ToList();
+            var columnNames = columns.Select(x => x.ColumnName).ToList();
             var rows = new List<object[]>(objects.Count);
             foreach (var obj in objects)
             {
                 var row = new object[columns.Count];
                 for (var i = 0; i < columns.Count; i++)
                 {
-                    row[i] = columns[i].GetValue(obj);
+                    row[i] = columns[i].Property.GetValue(obj);
                 }
                 rows.Add(row);
             }

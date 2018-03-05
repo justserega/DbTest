@@ -13,9 +13,9 @@ namespace StockAppCore.Models
         public DbSet<MoveDocument> MoveDocuments { get; set; }
         public DbSet<MoveDocumentItem> MoveDocumentItems { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public MyContext(DbContextOptions options) : base(options)
         {
-            optionsBuilder.UseNpgsql(@"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;");
+
         }
     }
 }

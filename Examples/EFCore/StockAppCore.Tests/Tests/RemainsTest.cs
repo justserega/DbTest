@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using StockAppCore.Services;
-using StockAppCore.Tests.Base;
 using StockAppCore.Tests.Fixtures;
 using System;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace StockAppCore.Tests
             builder.AddGood(doc2, Goods.JohnnieWalker, 7);
 
             /// ACT
-            var remains = RemainsService.GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
+            var remains = new RemainsService(World.GetContext()).GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);
@@ -55,7 +54,7 @@ namespace StockAppCore.Tests
             builder.AddGood(doc2, Goods.JohnnieWalker, 7);
 
             /// ACT
-            var remains = RemainsService.GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
+            var remains = new RemainsService(World.GetContext()).GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);

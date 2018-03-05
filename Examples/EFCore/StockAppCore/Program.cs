@@ -12,7 +12,10 @@ namespace StockAppCore
     {
         static void Main(string[] args)
         {
-            using (var context = new MyContext())
+            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            optionsBuilder.UseNpgsql(@"User ID=dev;Password=dev;Host=localhost;Port=5432;Database=dev;Pooling=true;");
+
+            using (var context = new MyContext(optionsBuilder.Options))
             {
                 var goods = context.Storages.Where(x => x.IsDeleted == false);
 

@@ -2,7 +2,7 @@
 using System;
 using System.Globalization;
 
-namespace StockAppCore.Tests.Base
+namespace StockAppCore.Tests
 {
     public class ModelBuilder
     {
@@ -19,7 +19,7 @@ namespace StockAppCore.Tests.Base
                 IsDeleted = false
             };
 
-            using (var db = new MyContext())
+            using (var db = World.GetContext())
             {
                 db.MoveDocuments.Add(document);
                 db.SaveChanges();
@@ -37,7 +37,7 @@ namespace StockAppCore.Tests.Base
                 Count = count
             };
 
-            using (var db = new MyContext())
+            using (var db = World.GetContext())
             {
                 db.MoveDocumentItems.Add(item);
                 db.SaveChanges();

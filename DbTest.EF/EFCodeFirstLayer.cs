@@ -40,11 +40,15 @@ namespace DbTest.EF
             }
         }
 
-        public List<PropertyInfo> GetColumns(Type type)
-        {
+        public List<ColumnInfo> GetColumns(Type type)
+        {            
+            // TODO: get info from metadata
             var columns = type.GetProperties().Where(x => x.PropertyType.IsValueType || x.PropertyType == typeof(string));
 
-            return columns.Where(x => !x.GetCustomAttributes(true).OfType<NotMappedAttribute>().Any()).ToList();
+            return columns
+                .Where(x => !x.GetCustomAttributes(true).OfType<NotMappedAttribute>().Any())
+                .Select(x => new ColumnInfo { Property = x, ColumnName = x.Name }) 
+                .ToList();
         }
 
         class MigrationConfig<TContext> : DbMigrationsConfiguration<TContext> where TContext : DbContext

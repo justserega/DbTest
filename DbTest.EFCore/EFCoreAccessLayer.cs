@@ -38,11 +38,25 @@ namespace DbTest.EFCore
             }
         }
 
-        public List<PropertyInfo> GetColumns(Type type)
+        public List<ColumnInfo> GetColumns(Type type)
         {
-            var columns = type.GetProperties().Where(x => x.PropertyType.IsValueType || x.PropertyType == typeof(string));
+            var entityType = _db.Model.FindEntityType(type);
 
-            return columns.Where(x => !x.GetCustomAttributes(true).OfType<NotMappedAttribute>().Any()).ToList();
+            // Table info 
+            var tableName = entityType.Relational().TableName;
+            var tableSchema = entityType.Relational().Schema;
+
+            // Column info 
+            //foreach (var property in entityType.GetProperties())
+            //{
+            //    var columnName = property.Relational().ColumnName;
+            //    var columnType = property.Relational().ColumnType;            
+            //}
+
+            return entityType.GetProperties()
+                .Select(x => new ColumnInfo { Property = x.PropertyInfo, ColumnName = x.Relational().ColumnName })
+                .ToList();
+
         }
     }
 }

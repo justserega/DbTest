@@ -9,6 +9,12 @@ namespace DbTest
         void Execute(string query);
         void CreateDatabase();
         IDatabasePreparer GetDatabasePreparer();
-        List<PropertyInfo> GetColumns(Type type);
+        List<ColumnInfo> GetColumns(Type type);
+    }
+
+    public class ColumnInfo
+    {
+        public PropertyInfo Property { get; set; }
+        public string ColumnName { get; set; }
     }
 }
