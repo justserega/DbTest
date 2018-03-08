@@ -1,6 +1,6 @@
 # DbTest
 
-DbTest is a tiny test library for .NET application. It helps you write tests with a real database very easy and native. It assumes dirty work with the database, and you still need [NUnit](https://github.com/nunit/nunit), [XUnit](https://github.com/xunit/xunit) or any of your favorite test framework.
+DbTest is a tiny test library for .NET application. It helps you write tests with a real database very easy and native. It does only dirty work with the database, and you still need [NUnit](https://github.com/nunit/nunit), [XUnit](https://github.com/xunit/xunit) or any of your favorite test framework.
 
 DbTest gives you clean database for each tests. It offers easy and maintainable way to create initial fixtures and test cases.
 
