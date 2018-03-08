@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/justserega/DbTest</PackageProjectUrl>
     <PackageIconUrl>https://github.com/justserega/DbTest/raw/master/nuget_icon.png</PackageIconUrl>
     <Description>Tiny framework for test with real db</Description>
-    <Copyright>Copyright © 2017 Sergei Shvec</Copyright>
+    <Copyright>Copyright © 2017-2018 Sergei Shvec</Copyright>
     <PackageTags>database test fixture</PackageTags>
   </PropertyGroup>
 
