@@ -26,9 +26,10 @@ Install common version for any ORM from nuget (need some configuration):
 ```
 Install-Package DbTest
 ```
-Or version for EntityFramework 6 with code-first (ready for use):
+Install EntityFramework6 or EntityFrameworkCore
 ```
 Install-Package DbTest.EF6
+Install-Package DbTest.EFCore
 ```
 
 ### Documentation
