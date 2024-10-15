@@ -15,7 +15,7 @@ namespace StockAppCore.Tests
         public void CalculateRemainsForMoveDocuments()
         {
             /// ARRANGE 
-            var builder = new ModelBuilder();
+            var builder = new DocumentBuilder();
 
             // Income to remote storage
             var doc1 = builder.CreateDocument("15.01.2016 10:00:00", StoragesFixture.MainStorage, StoragesFixture.RemoteStorage);
@@ -28,7 +28,7 @@ namespace StockAppCore.Tests
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(SandBox.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
+            var remains = new RemainsService(SandBox.GetStockDbContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);
@@ -40,7 +40,7 @@ namespace StockAppCore.Tests
         public void CalculateRemainsForMoveDocuments2()
         {
             /// ARRANGE 
-            var builder = new ModelBuilder();
+            var builder = new DocumentBuilder();
 
             // Income to remote storage
             var doc1 = builder.CreateDocument("15.01.2016 10:00:00", StoragesFixture.MainStorage, StoragesFixture.RemoteStorage);
@@ -53,7 +53,7 @@ namespace StockAppCore.Tests
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(SandBox.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
+            var remains = new RemainsService(SandBox.GetStockDbContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);

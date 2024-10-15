@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace StockAppCore.Tests
 {
-    public class ModelBuilder
+    public class DocumentBuilder
     {
         public MoveDocument CreateDocument(string time, Storage source, Storage dest)
         {
@@ -18,7 +18,7 @@ namespace StockAppCore.Tests
                 IsDeleted = false
             };
 
-            using (var db = SandBox.GetContext())
+            using (var db = SandBox.GetStockDbContext())
             {
                 db.MoveDocuments.Add(document);
                 db.SaveChanges();
@@ -36,7 +36,7 @@ namespace StockAppCore.Tests
                 Count = count
             };
 
-            using (var db = SandBox.GetContext())
+            using (var db = SandBox.GetStockDbContext())
             {
                 db.MoveDocumentItems.Add(item);
                 db.SaveChanges();

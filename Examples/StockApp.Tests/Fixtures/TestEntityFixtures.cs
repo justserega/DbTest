@@ -9,6 +9,8 @@ namespace StockAppCore.Tests.Fixtures
         public static TestEntity Pcs => new TestEntity
         {
             Id = Guid.NewGuid(),
+            Time = DateTime.UtcNow,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow)
         };
 
     }

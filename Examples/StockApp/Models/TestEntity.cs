@@ -12,6 +12,8 @@ namespace StockApp.Models
         [Column(TypeName = "jsonb")]
         public string[] Tags { get; set; } = [];
         public TestEntityType EntityType { get; set; }
+        public DateTime Time { get; set; }
+        public DateOnly Date { get; set; }
     }
 
     public enum TestEntityType
