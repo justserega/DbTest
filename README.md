@@ -112,49 +112,41 @@ Pay attention to external keys in models we do not set it explicitly instead tak
 
 DbSet apply migrations and clean database before every test, to prepare call this
 
-```cs
-    using (var context = new MyContext());
-    var dbTest = new EFTestDatabase<MyContext>(context);
-
-    dbTest.ResetWithFixtures(
-        new CountriesFixture(),
-        new ManufacturersFixture(),
-        new GoodsFixture()
-    );  
+```cs    
+    new EFTestDatabase<MyContext>(SandBox.GetContext());
+        .ResetWithFixtures(
+            new CountriesFixture(),
+            new ManufacturersFixture(),
+            new GoodsFixture()
+        );
 ```
 
 
 ## SandBox
 
-`SandBox` is a conception of test environment. First of all, it is a point to prepare database - clean, load initial fixtures.
-Secondly, you can create some singletons, set values to static variable and so on. For example, for `asp.net mvc` you can set HttpContext 
-with a user. It is not included in `DbTest`, you have to create it.
+`SandBox` is a conception of test environment. It has connection to test database and methods to clean and load initial fixtures
 
 ```cs
 static class SandBox
 {
-    public static void InitDatabase()
-    {
-        using (var context = new MyContext());
-        var dbTest = new EFTestDatabase<MyContext>(context);
+    const string ConnectionString = @"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;";
 
-        dbTest.ResetWithFixtures(
-            new CountriesFixture(),
-            new ManufacturersFixture(),
-            new GoodsFixture()
-        );        
+    public static void InitDatabase()
+    {        
+        new EFTestDatabase<MyContext>(GetContext())
+            .ResetWithFixtures(
+                new CountriesFixture(),
+                new ManufacturersFixture(),
+                new GoodsFixture()
+            );
     }
 
-    public static void InitContextWithUser()
+    public MyContext GetContext()
     {
-        HttpContext.Current = new HttpContext(
-            new HttpRequest("", "http://your-domain.com", ""),
-            new HttpResponse(new StringWriter())
-        );
-        HttpContext.Current.User = new GenericPrincipal(
-            new GenericIdentity("root"),
-            new string[0]
-            );
+        var optionsBuilder = new DbContextOptionsBuilder<StockDbContext>();
+        optionsBuilder.UseNpgsql(ConnectionString);
+
+        return new StockDbContext(optionsBuilder.Options);
     }
 }
 ```
@@ -180,7 +172,7 @@ public class ModelBuilder
             IsDeleted = false
         };
 
-        using (var db = new MyContext())
+        using (var db = SandBox.GetContext())
         {
             db.MoveDocuments.Add(document);
             db.SaveChanges();
@@ -198,7 +190,7 @@ public class ModelBuilder
             Count = count
         };
 
-        using (var db = new MyContext())
+        using (var db = SandBox.GetContext())
         {
             db.MoveDocumentItems.Add(item);
             db.SaveChanges();
