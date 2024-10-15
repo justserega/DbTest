@@ -3,15 +3,13 @@ using StockAppCore.Models;
 
 namespace StockAppCore.Tests.Fixtures
 {
-    class Manufacturers : IModelFixture<Manufacturer>
+    class ManufacturersFixture : IModelFixture<Manufacturer>
     {
-        public string TableName => "Manufacturers";
-
         public static Manufacturer BrownForman => new Manufacturer
         {
             Id = 1,
             Name = "Brown-Forman",
-            CountryId = Countries.USA.Id,
+            CountryId = CountriesFixture.USA.Id,
             IsDeleted = false
         };
 
@@ -19,7 +17,7 @@ namespace StockAppCore.Tests.Fixtures
         {
             Id = 2,
             Name = "The Edrington Group",
-            CountryId = Countries.Scotland.Id,
+            CountryId = CountriesFixture.Scotland.Id,
             IsDeleted = false
         };
 
@@ -27,7 +25,7 @@ namespace StockAppCore.Tests.Fixtures
         {
             Id = 3,
             Name = "Diageo",
-            CountryId = Countries.Scotland.Id,
+            CountryId = CountriesFixture.Scotland.Id,
             IsDeleted = false
         };
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -6,6 +7,7 @@ namespace DbTest
 {
     public interface IDataAccessLayer
     {
+        DbContext Db { get; }
         void Execute(string query);
         void CreateDatabase();
         IDatabasePreparer GetDatabasePreparer();

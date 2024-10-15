@@ -9,38 +9,38 @@ namespace DbTest.EFCore
 {
     public class EFCoreAccessLayer<T> : IDataAccessLayer where T : DbContext
     {
-        DbContext _db;
+        public DbContext Db { get; private set; }
         public EFCoreAccessLayer(T db)
         {
-            _db = db;            
+            Db = db;            
         }
 
         public void CreateDatabase()
         {
-            _db.Database.Migrate();
+            Db.Database.Migrate();
         }
 
         public void Execute(string query)
         {
-            _db.Database.ExecuteSqlRaw(query);
+            Db.Database.ExecuteSqlRaw(query);
         }
 
         public IDatabasePreparer GetDatabasePreparer()
         {
             // TODO: bad provider detection
-            var connectionType = _db.Database.GetDbConnection().GetType().FullName;
+            var connectionType = Db.Database.GetDbConnection().GetType().FullName;
 
             switch (connectionType)
             {
                 case "System.Data.SqlClient.SqlConnection": return new SqlServerPreparer();
-                case "Npgsql.NpgsqlConnection": return new PostgresqlPreparer();
+                case "Npgsql.NpgsqlConnection": return new PostgresqlPreparer(Db);
                 default: throw new Exception("Don't detect provider");
             }
         }
 
         public List<ColumnInfo> GetColumns(Type type)
         {
-            var entityType = _db.Model.FindEntityType(type);
+            var entityType = Db.Model.FindEntityType(type);
 
             // Table info 
             var tableName = entityType.GetTableName();

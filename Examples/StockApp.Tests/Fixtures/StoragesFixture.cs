@@ -4,10 +4,8 @@ using StockAppCore.Models;
 
 namespace StockAppCore.Tests.Fixtures
 {
-    public class Storages : IModelFixture<Storage>
+    public class StoragesFixture : IModelFixture<Storage>
     {
-        public string TableName => "Storages";
-
         public static Storage MainStorage => new Storage
         {
             Id = 1,

@@ -3,10 +3,8 @@ using StockAppCore.Models;
 
 namespace StockAppCore.Tests.Fixtures
 {
-    public class Units : IModelFixture<Unit>
+    public class UnitsFixture : IModelFixture<Unit>
     {
-        public string TableName => "Units";
-
         public static Unit Pcs => new Unit
         {
             Id = 1,

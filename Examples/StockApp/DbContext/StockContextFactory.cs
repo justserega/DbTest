@@ -9,7 +9,7 @@ namespace StockApp
         public StockDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<StockDbContext>();
-            optionsBuilder.UseNpgsql(@"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;");
+            optionsBuilder.UseNpgsql(@"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;", x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stock"));
 
             return new StockDbContext(optionsBuilder.Options);
         }

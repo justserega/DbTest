@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,9 +12,22 @@ namespace DbTest
 {
     public class PostgresqlPreparer : IDatabasePreparer
     {
+        private readonly DbContext _dbContext;
+
+        public PostgresqlPreparer(DbContext dbContext)
+        {            
+            _dbContext = dbContext;
+        }
+
         public void BeforeLoad(IDataAccessLayer connection)
         {
-            connection.Execute(@"
+            var historyRepository = _dbContext.GetService<IHistoryRepository>();
+            var type = historyRepository.GetType();
+
+            var tableName = type.GetProperty("TableName", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository);
+            var tableScheme = type.GetProperty("TableSchema", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository);
+
+            connection.Execute(@$"
                     do
                     $$
                     declare
@@ -19,7 +36,7 @@ namespace DbTest
                       select 'truncate ' || string_agg(format('%I.%I', schemaname, tablename), ',')
                         into l_stmt
                       from pg_tables
-                      where schemaname in ('public') and tablename != '__EFMigrationsHistory';
+                      where schemaname in ('{tableScheme}') and tablename != '{tableName}';
 
                       execute l_stmt;
                     end;
@@ -86,7 +103,7 @@ namespace DbTest
                     
                 }
 
-                var sql = $@"INSERT INTO ""{tableName}"" ({columns}) VALUES ({string.Join(",", values)});";
+                var sql = $@"INSERT INTO {tableName} ({columns}) VALUES ({string.Join(",", values)});";
                 connection.Execute(sql);
             }
         }

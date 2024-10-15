@@ -5,10 +5,8 @@ using StockAppCore.Models;
 
 namespace StockAppCore.Tests.Fixtures
 {
-    public class Countries : IModelFixture<Country>
+    public class CountriesFixture : IModelFixture<Country>
     {
-        public string TableName => "Countries";
-
         public static Country Scotland => new Country
         {
             Id = 1,

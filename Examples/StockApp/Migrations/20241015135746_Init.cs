@@ -12,8 +12,12 @@ namespace StockApp.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "stock");
+
             migrationBuilder.CreateTable(
                 name: "Countries",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -28,6 +32,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MoveDocuments",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -45,6 +50,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Storages",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -59,6 +65,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Units",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -74,6 +81,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Manufacturers",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -88,6 +96,7 @@ namespace StockApp.Migrations
                     table.ForeignKey(
                         name: "FK_Manufacturers_Countries_CountryId",
                         column: x => x.CountryId,
+                        principalSchema: "stock",
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -95,6 +104,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Goods",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -110,12 +120,14 @@ namespace StockApp.Migrations
                     table.ForeignKey(
                         name: "FK_Goods_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
+                        principalSchema: "stock",
                         principalTable: "Manufacturers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Goods_Units_UnitId",
                         column: x => x.UnitId,
+                        principalSchema: "stock",
                         principalTable: "Units",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -123,6 +135,7 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MoveDocumentItems",
+                schema: "stock",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -138,12 +151,14 @@ namespace StockApp.Migrations
                     table.ForeignKey(
                         name: "FK_MoveDocumentItems_Goods_GoodId",
                         column: x => x.GoodId,
+                        principalSchema: "stock",
                         principalTable: "Goods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MoveDocumentItems_MoveDocuments_MoveDocumentId",
                         column: x => x.MoveDocumentId,
+                        principalSchema: "stock",
                         principalTable: "MoveDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -151,26 +166,31 @@ namespace StockApp.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Goods_ManufacturerId",
+                schema: "stock",
                 table: "Goods",
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Goods_UnitId",
+                schema: "stock",
                 table: "Goods",
                 column: "UnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Manufacturers_CountryId",
+                schema: "stock",
                 table: "Manufacturers",
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MoveDocumentItems_GoodId",
+                schema: "stock",
                 table: "MoveDocumentItems",
                 column: "GoodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MoveDocumentItems_MoveDocumentId",
+                schema: "stock",
                 table: "MoveDocumentItems",
                 column: "MoveDocumentId");
         }
@@ -179,25 +199,32 @@ namespace StockApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MoveDocumentItems");
+                name: "MoveDocumentItems",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "Storages");
+                name: "Storages",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "Goods");
+                name: "Goods",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "MoveDocuments");
+                name: "MoveDocuments",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "Manufacturers");
+                name: "Manufacturers",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "Units");
+                name: "Units",
+                schema: "stock");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "Countries",
+                schema: "stock");
         }
     }
 }

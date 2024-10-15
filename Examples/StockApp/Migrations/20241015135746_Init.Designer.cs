@@ -12,7 +12,7 @@ using StockApp;
 namespace StockApp.Migrations
 {
     [DbContext(typeof(StockDbContext))]
-    [Migration("20241015120727_Init")]
+    [Migration("20241015135746_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,6 +20,7 @@ namespace StockApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("stock")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -42,7 +43,7 @@ namespace StockApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.Good", b =>
@@ -72,7 +73,7 @@ namespace StockApp.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("Goods");
+                    b.ToTable("Goods", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.Manufacturer", b =>
@@ -97,7 +98,7 @@ namespace StockApp.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.MoveDocument", b =>
@@ -126,7 +127,7 @@ namespace StockApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MoveDocuments");
+                    b.ToTable("MoveDocuments", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.MoveDocumentItem", b =>
@@ -155,7 +156,7 @@ namespace StockApp.Migrations
 
                     b.HasIndex("MoveDocumentId");
 
-                    b.ToTable("MoveDocumentItems");
+                    b.ToTable("MoveDocumentItems", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.Storage", b =>
@@ -175,7 +176,7 @@ namespace StockApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Storages");
+                    b.ToTable("Storages", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.Unit", b =>
@@ -199,7 +200,7 @@ namespace StockApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units");
+                    b.ToTable("Units", "stock");
                 });
 
             modelBuilder.Entity("StockAppCore.Models.Good", b =>

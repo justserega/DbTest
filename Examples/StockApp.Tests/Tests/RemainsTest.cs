@@ -18,22 +18,22 @@ namespace StockAppCore.Tests
             var builder = new ModelBuilder();
 
             // Income to remote storage
-            var doc1 = builder.CreateDocument("15.01.2016 10:00:00", Storages.MainStorage, Storages.RemoteStorage);
-            builder.AddGood(doc1, Goods.JackDaniels, 10);
-            builder.AddGood(doc1, Goods.JohnnieWalker, 15);
+            var doc1 = builder.CreateDocument("15.01.2016 10:00:00", StoragesFixture.MainStorage, StoragesFixture.RemoteStorage);
+            builder.AddGood(doc1, GoodsFixture.JackDaniels, 10);
+            builder.AddGood(doc1, GoodsFixture.JohnnieWalker, 15);
 
             // Outcome from remote storage
-            var doc2 = builder.CreateDocument("16.01.2016 20:00:00", Storages.RemoteStorage, Storages.MainStorage);
-            builder.AddGood(doc2, Goods.JohnnieWalker, 7);
+            var doc2 = builder.CreateDocument("16.01.2016 20:00:00", StoragesFixture.RemoteStorage, StoragesFixture.MainStorage);
+            builder.AddGood(doc2, GoodsFixture.JohnnieWalker, 7);
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(World.GetContext()).GetRemainFor(Storages.RemoteStorage, date);
+            var remains = new RemainsService(World.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);
-            Assert.AreEqual(10, remains.Single(x => x.GoodId == Goods.JackDaniels.Id).Count);
-            Assert.AreEqual(8, remains.Single(x => x.GoodId == Goods.JohnnieWalker.Id).Count);
+            Assert.AreEqual(10, remains.Single(x => x.GoodId == GoodsFixture.JackDaniels.Id).Count);
+            Assert.AreEqual(8, remains.Single(x => x.GoodId == GoodsFixture.JohnnieWalker.Id).Count);
         }
 
         [Test]
@@ -43,22 +43,22 @@ namespace StockAppCore.Tests
             var builder = new ModelBuilder();
 
             // Income to remote storage
-            var doc1 = builder.CreateDocument("15.01.2016 10:00:00", Storages.MainStorage, Storages.RemoteStorage);
-            builder.AddGood(doc1, Goods.JackDaniels, 10);
-            builder.AddGood(doc1, Goods.JohnnieWalker, 15);
+            var doc1 = builder.CreateDocument("15.01.2016 10:00:00", StoragesFixture.MainStorage, StoragesFixture.RemoteStorage);
+            builder.AddGood(doc1, GoodsFixture.JackDaniels, 10);
+            builder.AddGood(doc1, GoodsFixture.JohnnieWalker, 15);
 
             // Outcome from remote storage
-            var doc2 = builder.CreateDocument("16.01.2016 20:00:00", Storages.RemoteStorage, Storages.MainStorage);
-            builder.AddGood(doc2, Goods.JohnnieWalker, 7);
+            var doc2 = builder.CreateDocument("16.01.2016 20:00:00", StoragesFixture.RemoteStorage, StoragesFixture.MainStorage);
+            builder.AddGood(doc2, GoodsFixture.JohnnieWalker, 7);
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(World.GetContext()).GetRemainFor(Storages.RemoteStorage, date);
+            var remains = new RemainsService(World.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);
-            Assert.AreEqual(10, remains.Single(x => x.GoodId == Goods.JackDaniels.Id).Count);
-            Assert.AreEqual(8, remains.Single(x => x.GoodId == Goods.JohnnieWalker.Id).Count);
+            Assert.AreEqual(10, remains.Single(x => x.GoodId == GoodsFixture.JackDaniels.Id).Count);
+            Assert.AreEqual(8, remains.Single(x => x.GoodId == GoodsFixture.JohnnieWalker.Id).Count);
         }
     }
 }

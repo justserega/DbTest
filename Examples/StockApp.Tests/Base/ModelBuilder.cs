@@ -1,5 +1,4 @@
 ﻿using StockAppCore.Models;
-using System;
 using System.Globalization;
 
 namespace StockAppCore.Tests

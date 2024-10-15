@@ -9,17 +9,15 @@ namespace StockAppCore.Tests
     {
         public static void InitDatabase()
         {
-
-
             using (var context = GetContext())
             {
                 var dbTest = new EFTestDatabase<StockDbContext>(context);
 
                 dbTest.ResetWithFixtures(
-                    new Units(),
-                    new Countries(),
-                    new Manufacturers(),
-                    new Goods()
+                    new UnitsFixture(),
+                    new CountriesFixture(),
+                    new ManufacturersFixture(),
+                    new GoodsFixture()
                 );
             }
         }
@@ -27,7 +25,7 @@ namespace StockAppCore.Tests
         public static StockDbContext GetContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<StockDbContext>();
-            optionsBuilder.UseNpgsql(@"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;");
+            optionsBuilder.UseNpgsql(@"User ID=test;Password=test;Host=localhost;Port=5432;Database=test;Pooling=true;", x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stock"));
 
             return new StockDbContext(optionsBuilder.Options);
         }

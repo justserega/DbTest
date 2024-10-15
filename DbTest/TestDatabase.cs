@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,14 +25,13 @@ namespace DbTest
             _databasePreparer.AfterLoad(_dataAccessLayer);
         }
 
-        private void LoadFixture<T>(IModelFixture<T> fixture)
+        private void LoadFixture<T>(IModelFixture<T> fixture) where T : class 
         {
-            var tableName = fixture.TableName;
             var modelType = fixture.GetType().GetTypeInfo().GetInterfaces()
                 .First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IModelFixture<>))
                 .GenericTypeArguments[0];
 
-
+            var tableName = GetTableName(_dataAccessLayer.Db, modelType);
             var columns = _dataAccessLayer.GetColumns(modelType);
 
             List<object> objects = new List<object>();
@@ -57,6 +57,21 @@ namespace DbTest
             }
 
             _databasePreparer.InsertObjects(_dataAccessLayer, tableName, columnNames, rows);           
+        }
+
+        public string GetTableName(DbContext context, Type modelType)
+        {
+            // Получаем метаданные о типе сущности
+            var entityType = context.Model.FindEntityType(modelType);
+
+            if (entityType == null)
+                throw new InvalidOperationException($"Entity type '{modelType.Name}' not found in the current DbContext.");
+
+            // Получаем имя таблицы и схему
+            var tableName = entityType.GetTableName();
+            var schema = entityType.GetSchema();
+
+            return schema != null ? $"\"{schema}\".\"{tableName}\"" : $"\"{tableName}\"";
         }
     }
 }
