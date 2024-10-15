@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbTest\DbTest.csproj" />
+    <ProjectReference Include="..\..\DbTest\DbTest.csproj" />
     <ProjectReference Include="..\StockApp\StockApp.csproj" />
   </ItemGroup>
 

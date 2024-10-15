@@ -6,14 +6,29 @@
     <PackageId>DbTest</PackageId>
     <Version>1.0.0</Version>
     <Authors>Sergei Shvec</Authors>
-    <Company>Sergei Shvec</Company>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/justserega/DbTest/master/LICENSE</PackageLicenseUrl>
+    <Company>Sergei Shvec</Company>    
     <PackageProjectUrl>https://github.com/justserega/DbTest</PackageProjectUrl>
     <PackageIconUrl>https://github.com/justserega/DbTest/raw/master/nuget_icon.png</PackageIconUrl>
     <Description>Tiny framework for test with real db</Description>
     <Copyright>Copyright © 2017-2024 Sergei Shvec</Copyright>
     <PackageTags>database test fixture</PackageTags>
+    <PackageIcon>nuget_icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/justserega/DbTest</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Title>DbTest</Title>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\nuget_icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
