@@ -38,24 +38,6 @@ Install-Package DbTest
 
 You can see usages in [Examples](https://github.com/justserega/DbTest/tree/master/Examples)
 
-## Prepare database
-
-You need some database to tests. For little project `sqlite` could be a good choice (as a compromise between performance and reliability of tests). For complex scenarious you need same database which you use in production. As usual it is not problem:
-Mysql, Postgresql - lite enough, MSSQL - has LocalDb mode.
-
-In now days DbTest work only with MSSQL out-of-box, but it can configurate to work with any database throw IDatabasePrepare interface.
-DbTest has methods to reset database and load initial fixtures:
-
-```cs
-var dbTest = new TestDatabase(dataLayer);
-
-dbTest.ResetWithFixtures(
-    new Countries(),
-    new Manufacturers(),
-    new Products()
-);
-```
-
 ## Fixtures
 
 A real system has many relations between models, we need to fill many tables before create one row in a target table. 
@@ -64,7 +46,7 @@ For example, Products can be related to Manufacturers which related to Country.
 Let's start from model which has no relations: 
 
 ```cs
-public class Countries : IModelFixture<Country>
+public class CountriesFixture : IModelFixture<Country>
 {
     public string TableName => "Countries";
 
@@ -87,15 +69,14 @@ First of all we need class that realize `IModelFixture<T>` interface. Each model
 
 Now, we are ready to create Manufacturers and Products.
 ```cs
-class Manufacturers : IModelFixture<Manufacturer>
+class ManufacturersFixture : IModelFixture<Manufacturer>
 {
-    public string TableName => "Manufacturers";
 
     public static Manufacturer BrownForman => new Manufacturer
     {
         Id = 1,
         Name = "Brown-Forman",
-        CountryId = Countries.USA.Id,
+        CountryId = CountriesFixture.USA.Id,
         IsDeleted = false
     };
 
@@ -103,20 +84,18 @@ class Manufacturers : IModelFixture<Manufacturer>
     {
         Id = 2,
         Name = "The Edrington Group",
-        CountryId = Countries.Scotland.Id,
+        CountryId = CountriesFixture.Scotland.Id,
         IsDeleted = false
     };
 }
 
-public class Goods : IModelFixture<Good>
+public class GoodsFixture : IModelFixture<Good>
 {
-    public string TableName => "Goods";
-
     public static Good JackDaniels => new Good
     {
         Id = 1,
         Name = "Jack Daniels, 0.5l",
-        ManufacturerId = Manufacturers.BrownForman.Id,
+        ManufacturerId = ManufacturersFixture.BrownForman.Id,
         IsDeleted = false
     };
 
@@ -124,34 +103,48 @@ public class Goods : IModelFixture<Good>
     {
         Id = 2,
         Name = "The Famous Grouse Finest, 0.5l",
-        ManufacturerId = Manufacturers.TheEdringtonGroup.Id,
+        ManufacturerId = ManufacturersFixture.TheEdringtonGroup.Id,
         IsDeleted = false
     };
 }
 ```
 Pay attention to external keys in models we do not set it explicitly instead take value from another fixture. You give advise from  intellisence when create your fixtures and check from compiler when your system change and fixtures must changed too.
 
+## Prepare database for test
+
+DbSet apply migrations and clean database before every test, to prepare call this
+
+```cs
+    using (var context = new MyContext());
+    var dbTest = new EFTestDatabase<MyContext>(context);
+
+    dbTest.ResetWithFixtures(
+        new CountriesFixture(),
+        new ManufacturersFixture(),
+        new GoodsFixture()
+    );  
+```
+
+
 ## World
 
 `World` is a conception of test environment. First of all, it is a point to prepare database - clean, load initial fixtures.
-Secondly, you can create singletons, set values to static variable and so on. For example, for `asp.net mvc` you can set HttpContext 
-with a user:
+Secondly, you can create some singletons, set values to static variable and so on. For example, for `asp.net mvc` you can set HttpContext 
+with a user. It is not included in `DbTest`, you have to create it.
 
 ```cs
 static class World
 {
     public static void InitDatabase()
     {
-        using (var context = new MyContext())
-        {
-            var dbTest = new EFTestDatabase<MyContext>(context);
+        using (var context = new MyContext());
+        var dbTest = new EFTestDatabase<MyContext>(context);
 
-            dbTest.ResetWithFixtures(
-                new Countries(),
-                new Manufacturers(),
-                new Goods()
-            );
-        }
+        dbTest.ResetWithFixtures(
+            new CountriesFixture(),
+            new ManufacturersFixture(),
+            new GoodsFixture()
+        );        
     }
 
     public static void InitContextWithUser()
