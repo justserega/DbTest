@@ -29,16 +29,14 @@ The main idea to create high level builder that fill tables in database. Each me
 
 ### Installation
 
-There are ready to use EntityFramework6 or EntityFrameworkCore versions. You can see usages in [Examples](https://github.com/justserega/DbTest/tree/master/Examples)
-```
-Install-Package DbTest.EF6
-Install-Package DbTest.EFCore
-```
 
-You can use common version for any ORM (need some configuration)
+Install in your `*.Tests` project:
+
 ```
 Install-Package DbTest
 ```
+
+You can see usages in [Examples](https://github.com/justserega/DbTest/tree/master/Examples)
 
 ### Documentation
 
