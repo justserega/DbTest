@@ -116,13 +116,6 @@
     <Compile Include="Tests\RemainsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\DbTest.EFCore\DbTest.EFCore.csproj">
-      <Project>{abbf83ea-0cef-4e2c-a70f-ec3b80a1dc2f}</Project>
-      <Name>DbTest.EFCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\DbTest\DbTest.csproj">
       <Project>{a5d7b1d7-0d6c-4291-9d62-b1e9318da67d}</Project>
       <Name>DbTest</Name>
@@ -134,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

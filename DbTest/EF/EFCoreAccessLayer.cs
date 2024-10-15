@@ -22,7 +22,7 @@ namespace DbTest.EFCore
 
         public void Execute(string query)
         {
-            _db.Database.ExecuteSqlCommand(query);
+            _db.Database.ExecuteSqlRaw(query);
         }
 
         public IDatabasePreparer GetDatabasePreparer()
@@ -43,8 +43,8 @@ namespace DbTest.EFCore
             var entityType = _db.Model.FindEntityType(type);
 
             // Table info 
-            var tableName = entityType.Relational().TableName;
-            var tableSchema = entityType.Relational().Schema;
+            var tableName = entityType.GetTableName();
+            var tableSchema = entityType.GetSchema();
 
             // Column info 
             //foreach (var property in entityType.GetProperties())
@@ -54,7 +54,7 @@ namespace DbTest.EFCore
             //}
 
             return entityType.GetProperties()
-                .Select(x => new ColumnInfo { Property = x.PropertyInfo, ColumnName = x.Relational().ColumnName })
+                .Select(x => new ColumnInfo { Property = x.PropertyInfo, ColumnName = x.GetColumnName() })
                 .ToList();
 
         }

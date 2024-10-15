@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using StockApp;
 using StockAppCore.Models;
 
 namespace StockAppCore.Services
 {
     public class RemainsService
     {
-        MyContext _context;
-        public RemainsService(MyContext context)
+        StockDbContext _context;
+        public RemainsService(StockDbContext context)
         {
             _context = context;
         }
