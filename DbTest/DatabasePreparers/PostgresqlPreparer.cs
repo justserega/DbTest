@@ -25,7 +25,7 @@ namespace DbTest
             var type = historyRepository.GetType();
 
             var tableName = type.GetProperty("TableName", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository);
-            var tableScheme = type.GetProperty("TableSchema", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository);
+            var tableScheme = type.GetProperty("TableSchema", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository) ?? "public";
 
             connection.Execute(@$"
                     do
