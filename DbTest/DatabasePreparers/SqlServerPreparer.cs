@@ -19,9 +19,9 @@ namespace DbTest
             connection.Execute("EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all'");
         }
 
-        public void InsertObjects(IDataAccessLayer connection, string tableName, List<string> columnNames, List<object[]> rows)
+        public void InsertObjects(IDataAccessLayer connection, string tableName, List<ColumnInfo> columns, List<object[]> rows)
         {
-            var columns = string.Join(",", columnNames);
+            var columnNames = string.Join(",", columns.Select(x => x.ColumnName));
 
             foreach (var row in rows)
             {

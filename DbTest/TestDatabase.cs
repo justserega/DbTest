@@ -44,7 +44,6 @@ namespace DbTest
                 }
             }
 
-            var columnNames = columns.Select(x => x.ColumnName).ToList();
             var rows = new List<object[]>(objects.Count);
             foreach (var obj in objects)
             {
@@ -56,7 +55,7 @@ namespace DbTest
                 rows.Add(row);
             }
 
-            _databasePreparer.InsertObjects(_dataAccessLayer, tableName, columnNames, rows);           
+            _databasePreparer.InsertObjects(_dataAccessLayer, tableName, columns, rows);           
         }
 
         public string GetTableName(DbContext context, Type modelType)

@@ -8,7 +8,7 @@ namespace StockAppCore.Tests
         [SetUp]
         public void SetUp()
         {
-            World.InitDatabase();
+            SandBox.InitDatabase();
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace StockAppCore.Tests
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(World.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
+            var remains = new RemainsService(SandBox.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);
@@ -53,7 +53,7 @@ namespace StockAppCore.Tests
 
             /// ACT
             var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-            var remains = new RemainsService(World.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
+            var remains = new RemainsService(SandBox.GetContext()).GetRemainFor(StoragesFixture.RemoteStorage, date);
 
             /// ASSERT
             Assert.AreEqual(2, remains.Count);

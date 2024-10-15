@@ -48,8 +48,6 @@ Let's start from model which has no relations:
 ```cs
 public class CountriesFixture : IModelFixture<Country>
 {
-    public string TableName => "Countries";
-
     public static Country Scotland => new Country
     {
         Id = 1,
@@ -126,14 +124,14 @@ DbSet apply migrations and clean database before every test, to prepare call thi
 ```
 
 
-## World
+## SandBox
 
-`World` is a conception of test environment. First of all, it is a point to prepare database - clean, load initial fixtures.
+`SandBox` is a conception of test environment. First of all, it is a point to prepare database - clean, load initial fixtures.
 Secondly, you can create some singletons, set values to static variable and so on. For example, for `asp.net mvc` you can set HttpContext 
 with a user. It is not included in `DbTest`, you have to create it.
 
 ```cs
-static class World
+static class SandBox
 {
     public static void InitDatabase()
     {

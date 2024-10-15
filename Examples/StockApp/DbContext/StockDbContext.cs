@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using StockApp.Models;
 using StockAppCore.Models;
 
 namespace StockApp
@@ -14,6 +15,8 @@ namespace StockApp
 
         public DbSet<MoveDocument> MoveDocuments { get; set; }
         public DbSet<MoveDocumentItem> MoveDocumentItems { get; set; }
+
+        public DbSet<TestEntity> TestEntities { get; set; }
 
         public StockDbContext(DbContextOptions options) : base(options)
         {

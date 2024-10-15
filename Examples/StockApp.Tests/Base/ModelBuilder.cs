@@ -18,7 +18,7 @@ namespace StockAppCore.Tests
                 IsDeleted = false
             };
 
-            using (var db = World.GetContext())
+            using (var db = SandBox.GetContext())
             {
                 db.MoveDocuments.Add(document);
                 db.SaveChanges();
@@ -36,7 +36,7 @@ namespace StockAppCore.Tests
                 Count = count
             };
 
-            using (var db = World.GetContext())
+            using (var db = SandBox.GetContext())
             {
                 db.MoveDocumentItems.Add(item);
                 db.SaveChanges();

@@ -11,6 +11,7 @@ namespace StockAppCore.Tests.Fixtures
             Name = "Jack Daniels, 0.5l",
             ManufacturerId = ManufacturersFixture.BrownForman.Id,
             UnitId = UnitsFixture.Pcs.Id,
+            Tags = ["whiskie", "special"],
             IsDeleted = false
         };
 
@@ -20,6 +21,7 @@ namespace StockAppCore.Tests.Fixtures
             Name = "Johnnie Walker Red Label, 0.7l",
             ManufacturerId = ManufacturersFixture.Diageo.Id,
             UnitId = UnitsFixture.Pcs.Id,
+            Tags = ["whiskie"],
             IsDeleted = false
         };
 
@@ -28,6 +30,7 @@ namespace StockAppCore.Tests.Fixtures
             Id = 3,
             Name = "The Famous Grouse Finest, 0.5l",
             ManufacturerId = ManufacturersFixture.TheEdringtonGroup.Id,
+            Tags = ["outdated"],
             UnitId = UnitsFixture.Pcs.Id,
             IsDeleted = false
         };

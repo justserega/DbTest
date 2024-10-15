@@ -1,12 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace DbTest
 {
@@ -19,7 +23,7 @@ namespace DbTest
             _dbContext = dbContext;
         }
 
-        public void BeforeLoad(IDataAccessLayer connection)
+        public void BeforeLoad(IDataAccessLayer dataAccessLayer)
         {
             var historyRepository = _dbContext.GetService<IHistoryRepository>();
             var type = historyRepository.GetType();
@@ -27,7 +31,7 @@ namespace DbTest
             var tableName = type.GetProperty("TableName", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository);
             var tableScheme = type.GetProperty("TableSchema", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(historyRepository) ?? "public";
 
-            connection.Execute(@$"
+            dataAccessLayer.Execute(@$"
                     do
                     $$
                     declare
@@ -44,68 +48,87 @@ namespace DbTest
                 ");
         }
 
-        public void AfterLoad(IDataAccessLayer connection)
+        public void AfterLoad(IDataAccessLayer dataAccessLayer)
         {
         }
 
-        public void InsertObjects(IDataAccessLayer connection, string tableName, List<string> columnNames, List<object[]> rows)
+        public void InsertObjects(IDataAccessLayer dataAccessLayer, string tableName, List<ColumnInfo> columns, List<object[]> rows)
         {
-            var columns = string.Join(",", columnNames.Select(x => $"\"{x}\""));
+            var connection = dataAccessLayer.Db.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open) connection.Open();
 
             foreach (var row in rows)
             {
+                using var command = connection.CreateCommand() as NpgsqlCommand;
+
                 var values = new List<string>();
-                foreach (var val in row)
-                { 
-                    switch(val)
-                    {
-                        case null:
-                            values.Add("null");
-                            break;
-                        case String str:
-                            values.Add($"'{str}'");
-                            break;
-                        case Guid guid:
-                            values.Add($"'{guid}'");
-                            break;
-                        case double d:
-                            values.Add(d.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case decimal d:
-                            values.Add(d.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case float f:
-                            values.Add(f.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case bool boolVal:
-                            values.Add(boolVal ? "True" : "False");
-                            break;
-                        case DateTime dateVal:
-                            values.Add($"'{dateVal.ToString("yyyy-MM-dd HH:mm:ss")}'");
-                            break;
-                        case int i:
-                            values.Add(i.ToString());
-                            break;
-                        default:
-                            var valType = val.GetType();
-
-                            if (valType.GetTypeInfo().IsEnum)
-                            {
-                                var enumVal = (int)val;
-                                values.Add(enumVal.ToString());
-                            }
-                            else
-                            {
-                                values.Add(val.ToString());
-                            }
-                            break;
-                    }
+                for(var i = 0; i < columns.Count; i++)
+                {
+                    var valueName = "@v" + i;
+                    values.Add(valueName);
                     
-                }
+                    var column = columns[i];
+                    var val = row[i];
 
-                var sql = $@"INSERT INTO {tableName} ({columns}) VALUES ({string.Join(",", values)});";
-                connection.Execute(sql);
+                    if (column.TypeName == "jsonb")
+                    {
+                        var serialized = JsonSerializer.Serialize(val);
+                        command.Parameters.AddWithValue(valueName, NpgsqlDbType.Jsonb, serialized);
+                    }
+                    else if (column.Property.PropertyType.IsEnum)
+                    {
+                        command.Parameters.AddWithValue(valueName, NpgsqlDbType.Integer, (int)val);
+                    }
+                    else
+                    {
+                        var dbType = GetDbType(column.TypeName);
+                        command.Parameters.AddWithValue(valueName, dbType, val ?? DBNull.Value);
+                    }
+                }
+                
+                var columnNames = string.Join(",", columns.Select(x => $"\"{x.ColumnName}\""));
+                command.CommandText = $@"INSERT INTO {tableName} ({columnNames}) VALUES ({string.Join(",", values)});";
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(command.CommandText, ex);
+                }
             }
+        }
+
+        private NpgsqlDbType GetDbType(string typeName)
+        {
+            if (Enum.TryParse(typeof(NpgsqlDbType), typeName, true, out var result))
+            {
+                return (NpgsqlDbType)result;
+            }
+
+            return typeName switch
+            {
+                "double precision" => NpgsqlDbType.Double,
+                _ => throw new ArgumentException($"Invalid NpgsqlDbType value: {typeName}")
+            };
+
+            
+
+            //switch (typeName)
+            //{
+            //    case "integer":
+            //        return NpgsqlDbType.Integer;
+            //    case "text":
+            //        return NpgsqlDbType.Text;                    
+            //    case "boolean":
+            //        return NpgsqlDbType.Boolean;
+            //    case "double":
+            //        return NpgsqlDbType.Double;
+            //}
+
+            //return 
+            //throw new NotImplementedException(typeName);
         }
     }
 }

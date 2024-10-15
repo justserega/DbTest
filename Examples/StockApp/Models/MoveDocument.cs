@@ -5,7 +5,7 @@ namespace StockAppCore.Models
 {
     public class MoveDocument
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public string Number { get; set; }
         public DateTime Time { get; set; }
         public bool IsDeleted { get; set; }

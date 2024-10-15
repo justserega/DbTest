@@ -1,4 +1,6 @@
-﻿namespace StockAppCore.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace StockAppCore.Models
 {
     public class Good
     {
@@ -11,5 +13,8 @@
         // Related models
         public Manufacturer Manufacturer { get; set; }
         public Unit Unit { get; set; }
+
+        [Column(TypeName = "jsonb")]
+        public string[] Tags { get; set; } = [];
     }
 }

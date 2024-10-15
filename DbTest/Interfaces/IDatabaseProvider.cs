@@ -7,6 +7,6 @@ namespace DbTest
     {
         void BeforeLoad(IDataAccessLayer dataAccessLayer);
         void AfterLoad(IDataAccessLayer dataAccessLayer);
-        void InsertObjects(IDataAccessLayer connection, string tableName, List<string> columnNames, List<object[]> values);
+        void InsertObjects(IDataAccessLayer dataAccessLayer, string tableName, List<ColumnInfo> columns, List<object[]> values);
     }
 }

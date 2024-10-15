@@ -9,6 +9,7 @@ namespace DbTest
     {
         DbContext Db { get; }
         void Execute(string query);
+
         void CreateDatabase();
         IDatabasePreparer GetDatabasePreparer();
         List<ColumnInfo> GetColumns(Type type);
@@ -16,6 +17,7 @@ namespace DbTest
 
     public class ColumnInfo
     {
+        public string TypeName { get; set; }
         public PropertyInfo Property { get; set; }
         public string ColumnName { get; set; }
     }

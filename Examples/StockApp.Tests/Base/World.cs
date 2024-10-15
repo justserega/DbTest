@@ -5,7 +5,7 @@ using StockAppCore.Tests.Fixtures;
 
 namespace StockAppCore.Tests
 {
-    static class World
+    static class SandBox
     {
         public static void InitDatabase()
         {
@@ -17,7 +17,8 @@ namespace StockAppCore.Tests
                     new UnitsFixture(),
                     new CountriesFixture(),
                     new ManufacturersFixture(),
-                    new GoodsFixture()
+                    new GoodsFixture(),
+                    new TestEntityFixtures()
                 );
             }
         }
