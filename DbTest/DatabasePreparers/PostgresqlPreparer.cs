@@ -111,6 +111,7 @@ namespace DbTest
             {
                 "double precision" => NpgsqlDbType.Double,
                 "timestamp with time zone" => NpgsqlDbType.TimestampTz,
+                "time without time zone" => NpgsqlDbType.Time,
                 _ => throw new ArgumentException($"Invalid NpgsqlDbType value: {typeName}")
             };
 

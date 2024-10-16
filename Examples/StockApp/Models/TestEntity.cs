@@ -14,6 +14,8 @@ namespace StockApp.Models
         public TestEntityType EntityType { get; set; }
         public DateTime Time { get; set; }
         public DateOnly Date { get; set; }
+
+        public TimeOnly TimeOnly { get; set; }
     }
 
     public enum TestEntityType

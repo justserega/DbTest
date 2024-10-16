@@ -1,6 +1,5 @@
 ﻿using DbTest;
 using StockApp.Models;
-using StockAppCore.Models;
 
 namespace StockAppCore.Tests.Fixtures
 {
@@ -10,7 +9,8 @@ namespace StockAppCore.Tests.Fixtures
         {
             Id = Guid.NewGuid(),
             Time = DateTime.UtcNow,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow)
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
+            TimeOnly = TimeOnly.FromDateTime(DateTime.UtcNow),
         };
 
     }
