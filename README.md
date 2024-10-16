@@ -1,6 +1,6 @@
 # DbTest
 
-DbTest is a tiny test library for .NET application. It helps you to write tests with a real database very easy and native. It does only dirty work with the database, and you still need [NUnit](https://github.com/nunit/nunit), [XUnit](https://github.com/xunit/xunit) or any of your favorite test framework.
+DbTest is a tiny test library for integration test with EntityFrameworkCore in .NET application. It helps you to write tests with a real database very easy and native. It does only dirty work with the database, and you still need [NUnit](https://github.com/nunit/nunit), [XUnit](https://github.com/xunit/xunit) or any of your favorite test framework.
 
 DbTest gives you clean database for each test. It offers easy and maintainable way to create initial fixtures and test cases.
 
@@ -21,10 +21,10 @@ DbTest is inspired by the test approach from  [Ruby on Rails](https://github.com
 Real database has many aspects that can not be emulated by Data Access Layer: constraints, triggers, complex SQL queries and so on. DbTest reset database to initial state before each test. SqlServer and Postgresql are supported now.
 
 - **Strong type fixtures**
-To define initial state you can use fixtures in txt files. Any changes in project can broke those fixtures, because compiler don't process them. DbTest offer a way to describe fixtures in code. You will get autocomplete, refactoring and type checking when you write and maintain fixtures.
+There are some libraries that can create initial state throught txt files. Any changes in project can broke those fixtures, because compiler don't process them. DbTest offer a way to describe fixtures in code. You will get autocomplete, refactoring and type checking when you write and maintain fixtures.
   
-- **Idea to make test case**
-The main idea to create high level builder that fill tables in database. Each method in this builder create one business model. See more details in [Concepts](https://github.com/justserega/DbTest/blob/master/docs/CoreConcepts.md#model-builder)
+- **Clean and understandable tests**
+Write your tests as a book, even non technical people can read and participate.
 
 
 ### Installation
