@@ -6,17 +6,17 @@ namespace StockAppCore.Tests.Fixtures
 {
     public class StoragesFixture : IModelFixture<Storage>
     {
-        public static Storage MainStorage => new Storage
+        public static Storage StorageA => new Storage
         {
             Id = 1,
-            Name = "Main storage",
+            Name = "Storage A",
             IsDeleted = false
         };
 
-        public static Storage RemoteStorage => new Storage
+        public static Storage StorageB => new Storage
         {
             Id = 2,
-            Name = "Remote storage",
+            Name = "Storage B",
             IsDeleted = false
         };
 

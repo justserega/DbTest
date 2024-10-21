@@ -5,7 +5,13 @@ namespace StockAppCore.Tests
 {
     public class DocumentBuilder
     {
-        public MoveDocument CreateDocument(string time, Storage source, Storage dest)
+        public int DocumentId { get; private set; }
+        public DocumentBuilder(int documentId) 
+        {
+            DocumentId = documentId;
+        }
+
+        public static DocumentBuilder CreateMoveDocument(string time, Storage source, Storage dest)
         {
             var document = new MoveDocument
             {
@@ -24,14 +30,14 @@ namespace StockAppCore.Tests
                 db.SaveChanges();
             }
 
-            return document;
+            return new DocumentBuilder(document.Id);
         }
 
-        public MoveDocumentItem AddGood(MoveDocument document, Good good, decimal count)
+        public DocumentBuilder AddGood(Good good, decimal count)
         {
             var item = new MoveDocumentItem
             {
-                MoveDocumentId = document.Id,
+                MoveDocumentId = DocumentId,
                 GoodId = good.Id,
                 Count = count
             };
@@ -42,12 +48,14 @@ namespace StockAppCore.Tests
                 db.SaveChanges();
             }
 
-            return item;
+            return this;
         }
 
-        private DateTime ParseTime(string str)
+        private static DateTime ParseTime(string str)
         {
-            return DateTime.ParseExact(str, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
         }
     }
+
+
 }

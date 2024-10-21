@@ -157,9 +157,15 @@ static class SandBox
 create and return one entity:
 
 ```cs
-public class ModelBuilder
+public class DocumentBuilder
 {
-    public MoveDocument CreateDocument(string time, Storage source, Storage dest)
+    public int DocumentId { get; private set; }
+    public DocumentBuilder(int documentId) 
+    {
+        DocumentId = documentId;
+    }
+
+    public static DocumentBuilder CreateMoveDocument(string time, Storage source, Storage dest)
     {
         var document = new MoveDocument
         {
@@ -168,35 +174,40 @@ public class ModelBuilder
             SourceStorageId = source.Id,
             DestStorageId = dest.Id,
 
-            Time = ParseTime(time),
+            Time = DateTime.SpecifyKind(ParseTime(time), DateTimeKind.Utc),
             IsDeleted = false
         };
 
-        using (var db = SandBox.GetContext())
+        using (var db = SandBox.GetStockDbContext())
         {
             db.MoveDocuments.Add(document);
             db.SaveChanges();
         }
 
-        return document;
+        return new DocumentBuilder(document.Id);
     }
 
-    public MoveDocumentItem AddGood(MoveDocument document, Good good, decimal count)
+    public DocumentBuilder AddGood(Good good, decimal count)
     {
         var item = new MoveDocumentItem
         {
-            MoveDocumentId = document.Id,
+            MoveDocumentId = DocumentId,
             GoodId = good.Id,
             Count = count
         };
 
-        using (var db = SandBox.GetContext())
+        using (var db = SandBox.GetStockDbContext())
         {
             db.MoveDocumentItems.Add(item);
             db.SaveChanges();
         }
 
-        return item;
+        return this;
+    }
+
+    private static DateTime ParseTime(string str)
+    {
+        return DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
     }
 }
 ```
@@ -207,28 +218,30 @@ public class ModelBuilder
 [SetUp]
 public void SetUp()
 {
-    World.InitDatabase(); // Main part, prepare database for test
+    SandBox.InitDatabase();
 }
 
 [Test]
-public void CalculateRemainsForMoveDocuments()
+public void CalculateRemainsForMoveDocuments2()
 {
-    // prepare test
-    var builder = new ModelBuilder();           
+    // Income to remote storage
+    DocumentBuilder
+        .CreateMoveDocument("2016-01-15 10:00:00", StoragesFixture.StorageA, StoragesFixture.StorageB)
+        .AddGood(GoodsFixture.JackDaniels, 10)
+        .AddGood(GoodsFixture.JohnnieWalker, 15);
 
-    var doc1 = builder.CreateDocument("15.01.2016 10:00:00", Storages.MainStorage, Storages.RemoteStorage);
-    builder.AddGood(doc1, Goods.JackDaniels, 10);
-    builder.AddGood(doc1, Goods.FamousGrouseFinest, 15);
-               
-    var doc2 = builder.CreateDocument("16.01.2016 20:00:00", Storages.RemoteStorage, Storages.MainStorage);
-    builder.AddGood(doc2, Goods.FamousGrouseFinest, 7);
+    // Outcome from remote storage
+    DocumentBuilder
+        .CreateMoveDocument("2016-01-16 20:00:00", StoragesFixture.StorageB, StoragesFixture.StorageA)
+        .AddGood(GoodsFixture.JohnnieWalker, 7);
 
-    // test
-    var remains = RemainsService.GetRemainFor(Storages.RemoteStorage, new DateTime(2016, 02, 01));
+    // ACT
+    var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
+    var remains = new RemainsService(SandBox.GetStockDbContext()).GetRemainFor(StoragesFixture.StorageB, date);
 
-    // assert
-    Assert.AreEqual(2,  remains.Count);
-    Assert.AreEqual(10, remains.Single(x => x.GoodId == Goods.JackDaniels.Id).Count);
-    Assert.AreEqual(8,  remains.Single(x => x.GoodId == Goods.FamousGrouseFinest.Id).Count);
+    // ASSERT
+    Assert.AreEqual(2, remains.Count);
+    Assert.AreEqual(10, remains.Single(x => x.GoodId == GoodsFixture.JackDaniels.Id).Count);
+    Assert.AreEqual(8, remains.Single(x => x.GoodId == GoodsFixture.JohnnieWalker.Id).Count);
 }
 ```
