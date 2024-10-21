@@ -1,5 +1,5 @@
 ﻿using StockAppCore.Models;
-using System.Globalization;
+using static StockApp.Tests.Utils.ParseUtils;
 
 namespace StockAppCore.Tests
 {
@@ -20,7 +20,7 @@ namespace StockAppCore.Tests
                 SourceStorageId = source.Id,
                 DestStorageId = dest.Id,
 
-                Time = DateTime.SpecifyKind(ParseTime(time), DateTimeKind.Utc),
+                Time = ParseTime(time),
                 IsDeleted = false
             };
 
@@ -49,11 +49,6 @@ namespace StockAppCore.Tests
             }
 
             return this;
-        }
-
-        private static DateTime ParseTime(string str)
-        {
-            return DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
         }
     }
 

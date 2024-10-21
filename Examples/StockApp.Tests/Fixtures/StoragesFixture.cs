@@ -20,5 +20,12 @@ namespace StockAppCore.Tests.Fixtures
             IsDeleted = false
         };
 
+        public static Storage StorageC => new Storage
+        {
+            Id = 3,
+            Name = "Storage C",
+            IsDeleted = false
+        };
+
     }
 }

@@ -174,7 +174,7 @@ public class DocumentBuilder
             SourceStorageId = source.Id,
             DestStorageId = dest.Id,
 
-            Time = DateTime.SpecifyKind(ParseTime(time), DateTimeKind.Utc),
+            Time = ParseTime(time),
             IsDeleted = false
         };
 
@@ -204,11 +204,6 @@ public class DocumentBuilder
 
         return this;
     }
-
-    private static DateTime ParseTime(string str)
-    {
-        return DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-    }
 }
 ```
 
@@ -222,24 +217,24 @@ public void SetUp()
 }
 
 [Test]
-public void CalculateRemainsForMoveDocuments2()
+public void CalculateRemainsForMoveDocuments()
 {
-    // Income to remote storage
+    // Income 2 goods to storage B
     DocumentBuilder
         .CreateMoveDocument("2016-01-15 10:00:00", StoragesFixture.StorageA, StoragesFixture.StorageB)
         .AddGood(GoodsFixture.JackDaniels, 10)
         .AddGood(GoodsFixture.JohnnieWalker, 15);
 
-    // Outcome from remote storage
+    // Outcome 1 good from storage B
     DocumentBuilder
-        .CreateMoveDocument("2016-01-16 20:00:00", StoragesFixture.StorageB, StoragesFixture.StorageA)
+        .CreateMoveDocument("2016-01-16 20:00:00", StoragesFixture.StorageB, StoragesFixture.StorageC)
         .AddGood(GoodsFixture.JohnnieWalker, 7);
 
-    // ACT
-    var date = DateTime.SpecifyKind(new DateTime(2016, 02, 01), DateTimeKind.Utc);
-    var remains = new RemainsService(SandBox.GetStockDbContext()).GetRemainFor(StoragesFixture.StorageB, date);
+    // test remains on storage B
+    var remainsService = new RemainsService(SandBox.GetStockDbContext());
+    var remains = remainsService.GetRemainFor(StoragesFixture.StorageB, ParseTime("2016-02-01 00:00:00"));
 
-    // ASSERT
+    // assert
     Assert.AreEqual(2, remains.Count);
     Assert.AreEqual(10, remains.Single(x => x.GoodId == GoodsFixture.JackDaniels.Id).Count);
     Assert.AreEqual(8, remains.Single(x => x.GoodId == GoodsFixture.JohnnieWalker.Id).Count);
